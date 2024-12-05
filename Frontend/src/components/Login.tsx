@@ -27,7 +27,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <div style={containerStyle}>
       <Title level={3}>
         Login to Asset Manager
       </Title>
@@ -36,7 +36,7 @@ const Login: React.FC = () => {
         name="login-form"
         layout="vertical"
         onFinish={handleSubmit}
-        style={styles.form}
+        style={formStyle}
         initialValues={{ remember: true }}
       >
         <Form.Item
@@ -66,28 +66,32 @@ const Login: React.FC = () => {
             Login</Button>
         </Form.Item>
       </Form>
-      <Link style={styles.forgotPassword} onClick={() => console.log("Navigate to Forgot Password")}>
+      <Link style={forgotPasswordStyle} onClick={() => console.log("Navigate to Forgot Password")}>
         Forgot Password?
       </Link>
     </div>
-
-
   );
 };
 
-const styles: React.CSSProperties = {
-  container: {
-    maxWidth: "400px",
-    margin: "150px auto 0",
-    padding: "20px",
-    textAlign: "center",
-    border: "1px solid #f0f0f0",
-    borderRadius: "8px",
-    backgroundColor: "#d5d5d5",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  },
-  form: { marginTop: "20px" },
-  forgotPassword: { marginTop: "10px", display: "block", cursor: "pointer" },
+
+
+const containerStyle: React.CSSProperties = {
+  maxWidth: "400px",
+  margin: "150px auto 0",
+  padding: "20px",
+  textAlign: "center",
+  border: "1px solid #f0f0f0",
+  borderRadius: "8px",
+  backgroundColor: "#d5d5d5",
+  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+};
+
+const formStyle: React.CSSProperties = { marginTop: "20px" };
+
+const forgotPasswordStyle: React.CSSProperties = {
+  marginTop: "10px",
+  display: "block",
+  cursor: "pointer",
 };
 
 export default Login;
