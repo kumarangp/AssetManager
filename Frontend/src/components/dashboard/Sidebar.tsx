@@ -3,6 +3,7 @@ import { Menu } from "antd";
 import { SettingOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
+
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
 
@@ -14,7 +15,7 @@ const Sidebar: React.FC = () => {
     <Menu
       mode="inline"
       defaultSelectedKeys={["/dashboard"]}
-      style={{ height: "100%" }}
+      style={{ height: "100%", background: "#DEF3FF" }}
       onClick={(e) => handleMenuClick(e.key)}
     >
       <Menu.Item key="/dashboard" icon={<SettingOutlined />}>
