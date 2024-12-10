@@ -1,0 +1,36 @@
+/* Sidebar styles */
+.ant-menu-item-selected {
+  background-color: #003366 !important; /* Active link background color */
+  color: #fa8c15 !important; /* Active link text color */
+}
+
+.ant-menu-item-selected .anticon {
+  color: #fa8c15 !important; /* Active icon color */  
+}
+
+.anticon:hover {
+  color: #fa8c15 !important; /* Active icon color */  
+}
+
+/* Hover styles */
+.ant-menu-item:hover {   
+  color: #fa8c15 !important; /* hover color */ 
+}
+
+/* General sidebar font color */
+.ant-menu {
+  /* Default font color */
+  color: #038fdd !important; 
+}
+
+.ant-menu-item {
+  font-weight: bold;  
+}
+
+.ant-menu-item-icon {
+  color: #1890ff !important; /* Default icon color */
+}
+
+.ant-menu-title-content {  
+  font-weight: bold;  
+}

@@ -24,8 +24,8 @@ const Dashboard: React.FC = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       {/* Sidebar */}
-      <Sider collapsible collapsed={collapsed} trigger={null} style={{ backgroundColor: "#001529" }}>
-        <div style={{ height: "64px", textAlign: "center", color: "white", lineHeight: "64px" }}>
+      <Sider collapsible collapsed={collapsed} trigger={null} style={{ backgroundColor: "#002447" }}>
+        <div style={{ height: "64px", textAlign: "center", color: "white", lineHeight: "64px", fontWeight: "bold" }}>
           {collapsed ? "IT" : "IT Asset Manager"}
         </div>
         <Sidebar />
@@ -34,7 +34,7 @@ const Dashboard: React.FC = () => {
       {/* Main Layout */}
       <Layout>
         {/* Header */}
-        <Header style={{ padding: "0 16px", background: "#FBC7C7", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Header style={{ padding: "0 16px", background: "#fff", display: "flex", alignItems: "center", justifyContent: "space-between", boxShadow:"0 0 4px 4px rgba(0,0,0,0.08)" }}>
           {/* Sidebar Toggle Button */}
           <Button
             type="text"

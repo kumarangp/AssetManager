@@ -1,0 +1,30 @@
+/* global.css */
+body, html, #root {
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.ant-layout {
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+}
+
+/* Table header & Label - font weight bold */
+.ant-table-thead .ant-table-cell, .ant-form-item-label {
+  font-weight: bold !important;
+}
+.ant-table-cell {
+  font-weight: 600;
+}
+
+/* Input text box border color */
+input[type='text']  {
+  border-color: #909090 !important;
+}
+
+#SeachInput {
+  border-color: #d9d9d9 !important;
+}
+

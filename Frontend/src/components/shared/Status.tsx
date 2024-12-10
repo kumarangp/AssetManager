@@ -1,0 +1,47 @@
+import React from "react";
+import { Select } from "antd";
+
+const { Option } = Select;
+
+interface StatusProps {
+  type?: "Default" | "AssetStatus"; // Determines which dropdown to show
+  value: string; // Current Selected value
+  onChange: (value: string) => void; // Function to handle change
+}
+
+const Status: React.FC<StatusProps> = ({ type = "Default", value, onChange }) => {
+  // Options for both dropdowns
+  const defaultOptions = ["Active", "Inactive"];
+  const assetStatusOptions = [
+    "All", "In Store", "Assigned", "Scrap", "Lost/Stolen",
+    "Damaged/Repair", "Installed"
+  ];
+
+  // Determine the options based on the type prop.
+  const options = type === "AssetStatus" ? assetStatusOptions : defaultOptions;
+
+  return (
+    <div>
+      <h4>Status:</h4>
+      <Select
+        value={value}
+        onChange={onChange}
+        style={{ width: 100 }}
+        placeholder="Select Status"
+      >
+        {
+          options.map((option) =>
+          (
+            <Option key={option} value={option}>
+              {option}
+            </Option>
+          ))
+        }
+      </Select>
+    </div>
+  );
+};
+
+export default Status;
+
+

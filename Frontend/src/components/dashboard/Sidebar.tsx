@@ -1,7 +1,10 @@
 import React from "react";
 import { Menu } from "antd";
-import { SettingOutlined, EnvironmentOutlined } from "@ant-design/icons";
+import { SettingFilled, EnvironmentFilled, DashboardFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import './Sidebar.css';
+
+// import { Color } from "antd/es/color-picker";
 
 
 const Sidebar: React.FC = () => {
@@ -11,19 +14,20 @@ const Sidebar: React.FC = () => {
     navigate(menuKey);
   };
 
-  return (
+  return (    
     <Menu
-      mode="inline"
+      mode="inline" 
       defaultSelectedKeys={["/dashboard"]}
-      style={{ height: "100%", background: "#DEF3FF" }}
+      style={{ height: "100%", background: "#003366", color: "#038fdd" }}  
       onClick={(e) => handleMenuClick(e.key)}
     >
-      <Menu.Item key="/dashboard" icon={<SettingOutlined />}>
+      
+      <Menu.Item key="/dashboard"  icon={<DashboardFilled />} style={{ color: "#038fdd" }}> 
         Dashboard
       </Menu.Item>
-
-      <Menu.SubMenu key="settings" icon={<SettingOutlined />} title="Settings">
-        <Menu.Item key="/settings/location" icon={<EnvironmentOutlined />}>
+      
+      <Menu.SubMenu key="settings" icon={<SettingFilled />} title="Settings" style={{ color: "#038fdd" }}>  
+        <Menu.Item key="/settings/location" icon={<EnvironmentFilled />} style={{ color: "#038fdd" }}>  
           Location
         </Menu.Item>
       </Menu.SubMenu>
