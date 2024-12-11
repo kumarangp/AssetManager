@@ -34,13 +34,13 @@ const Search: React.FC<SearchProps> = ({ placeholder = "Search...", onSearch }) 
         onChange={(e) => setSearchValue(e.target.value)}
         onPressEnter={handleSearch}
         onKeyUp={handleSearch}
-        style={{ width: 200, paddingRight: "22px" }}       
+        style={{ width: 200, paddingRight: "30px", fontWeight:"600", marginBottom: "10px", boxShadow: "rgba(0, 0, 0, 0.08) 0px 0px 2px 2px"}}       
       />
       {searchValue && (
         <CloseCircleFilled
           onClick={handleClear}
           style={{
-            position: 'absolute', right: '3%', top: '50%', 
+            position: 'absolute', right: '4%', top: '40%', 
             transform: 'translateY(-50%)', color: 'rgba(0,0,0,.45)',
             cursor: 'pointer', zIndex: 10
           }}

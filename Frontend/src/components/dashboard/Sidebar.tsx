@@ -14,24 +14,38 @@ const Sidebar: React.FC = () => {
     navigate(menuKey);
   };
 
+   // Define the menu items using the "items" prop
+  const menuItems = [
+    {
+      key: "/dashboard",
+      icon: <DashboardFilled />,
+      label: "Dashboard",
+      style: { color: "#038fdd" },
+    },
+    {
+      key: "settings",
+      icon: <SettingFilled />,
+      label: "Settings",
+      style: { color: "#038fdd" },
+      children: [
+        {
+          key: "/settings/location",
+          icon: <EnvironmentFilled />,
+          label: "Location",
+          style: { color: "#038fdd" },
+        },
+      ],
+    },
+  ];
+
   return (    
     <Menu
-      mode="inline" 
+      mode="inline"
       defaultSelectedKeys={["/dashboard"]}
-      style={{ height: "100%", background: "#003366", color: "#038fdd" }}  
+      style={{ height: "100%", background: "#003366", color: "#038fdd" }}
       onClick={(e) => handleMenuClick(e.key)}
-    >
-      
-      <Menu.Item key="/dashboard"  icon={<DashboardFilled />} style={{ color: "#038fdd" }}> 
-        Dashboard
-      </Menu.Item>
-      
-      <Menu.SubMenu key="settings" icon={<SettingFilled />} title="Settings" style={{ color: "#038fdd" }}>  
-        <Menu.Item key="/settings/location" icon={<EnvironmentFilled />} style={{ color: "#038fdd" }}>  
-          Location
-        </Menu.Item>
-      </Menu.SubMenu>
-    </Menu>
+      items={menuItems} // Pass the items prop here
+    />
   );
 };
 

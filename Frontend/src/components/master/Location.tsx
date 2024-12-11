@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Table, Space, Popconfirm, message, Typography, Modal } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Table,
+  Space,
+  Popconfirm,
+  message,
+  Typography,
+  Modal,
+} from "antd";
 // import PageSize from "../shared/PageSize";
 import Search from "../shared/Search";
 import Status from "../shared/Status";
@@ -21,8 +31,8 @@ const Location: React.FC = () => {
   const [locations, setLocations] = useState<Location[]>([]);
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-// -------------------------------------------------------------------------------
-const [currentPage, setCurrentPage] = useState<number>(1);
+  // -------------------------------------------------------------------------------
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(5);
 
   const handlePageChange = (page: number, size: number) => {
@@ -30,7 +40,7 @@ const [currentPage, setCurrentPage] = useState<number>(1);
     setPageSize(size);
     console.log(`Page: ${page}, Page Size: ${size}`);
   };
-// -------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------
   // Status Drop down
   const [status, setStatus] = useState<string>("Active");
 
@@ -43,7 +53,7 @@ const [currentPage, setCurrentPage] = useState<number>(1);
 
   const handleSearch = (searchTerm: string) => {
     // Implement your search logic
-    console.log('Searching for:', searchTerm);
+    console.log("Searching for:", searchTerm);
     // Typical use cases:
     // - Filter a list of items
     // - Make an API call
@@ -122,25 +132,31 @@ const [currentPage, setCurrentPage] = useState<number>(1);
   ];
 
   return (
-    <>   
-      
+    <>
       <div style={{ padding: "20px" }}>
         <Title level={3}>Location Master</Title>
-        <Button type="primary" onClick={handleOpenModal} style={{ marginBottom: "20px" }}>
+        <Button
+          type="primary"
+          onClick={handleOpenModal}
+          style={{ marginBottom: "20px" }}
+        >
           Add Location
         </Button>
-        
+
         <div>
-          <div style={{float: "left"}}>
-          {/* <PageSize value= {pageSize} onChange={handlePageSizeChange} /> */}
-          </div>  
-          <div style={{float: "right"}}>
-          <Search placeholder="Search Location" onSearch={handleSearch} />
-          </div>  
-          <div style={{clear: "both"}}></div>
+          <div style={{ float: "left" }}>
+            {/* Stauts Drop down */}
+            <Status
+              type="Default"
+              value={status}
+              onChange={(value) => setStatus(value)}
+            />
+          </div>
+          <div style={{ float: "right" }}>
+            <Search placeholder="Search Location" onSearch={handleSearch} />
+          </div>
+          <div style={{ clear: "both" }}></div>
         </div>
-        
-        
 
         {/* Table */}
         <Table
@@ -148,13 +164,10 @@ const [currentPage, setCurrentPage] = useState<number>(1);
           columns={columns}
           rowKey="key"
           pagination={{ pageSize: 5 }}
-        />
-
-        {/* Stauts Drop down */}
-        <Status
-          type="Default"
-          value={status}
-          onChange={(value) => setStatus(value)}
+          style={{
+            boxShadow:
+              "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+          }}
         />
 
         {/* Pagination */}
@@ -174,11 +187,7 @@ const [currentPage, setCurrentPage] = useState<number>(1);
             <Button key="cancel" onClick={handleCloseModal}>
               Cancel
             </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              onClick={() => form.submit()}
-            >
+            <Button key="submit" type="primary" onClick={() => form.submit()}>
               {editingKey ? "Update" : "Save"}
             </Button>,
           ]}
@@ -206,7 +215,6 @@ const [currentPage, setCurrentPage] = useState<number>(1);
           </Form>
         </Modal>
       </div>
-
     </>
   );
 };

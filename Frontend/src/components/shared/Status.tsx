@@ -26,8 +26,8 @@ const Status: React.FC<StatusProps> = ({ type = "Default", value, onChange }) =>
       <Select
         value={value}
         onChange={onChange}
-        style={{ width: 100 }}
-        placeholder="Select Status"
+        style={{ width: 100, boxShadow: "rgba(0, 0, 0, 0.08) 0px 0px 2px 2px" }}
+        placeholder="Select Status" 
       >
         {
           options.map((option) =>
