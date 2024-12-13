@@ -1,18 +1,14 @@
 import React from "react";
 import { Menu } from "antd";
 import { SettingFilled, EnvironmentFilled, DashboardFilled } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
 import './Sidebar.css';
 
-// import { Color } from "antd/es/color-picker";
-
-
 const Sidebar: React.FC = () => {
+  // Dynamic Active Key Management
   const navigate = useNavigate();
-
-  const handleMenuClick = (menuKey: string) => {
-    navigate(menuKey);
-  };
+  const location = useLocation();
 
    // Define the menu items using the "items" prop
   const menuItems = [
@@ -41,9 +37,9 @@ const Sidebar: React.FC = () => {
   return (    
     <Menu
       mode="inline"
-      defaultSelectedKeys={["/dashboard"]}
+      defaultSelectedKeys={[location.pathname]}
       style={{ height: "100%", background: "#003366", color: "#038fdd" }}
-      onClick={(e) => handleMenuClick(e.key)}
+      onClick={(e) => navigate(e.key)}
       items={menuItems} // Pass the items prop here
     />
   );

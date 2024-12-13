@@ -36,3 +36,7 @@ input[type='text']  {
 .ant-pagination-item .ant-pagination-item-active {
   border-color: #fa8c15 !important;
 }
+
+.anticon-close-circle:hover {
+  color: #fa8c15 !important;
+}

@@ -10,7 +10,7 @@ import {
   Typography,
   Modal,
 } from "antd";
-// import PageSize from "../shared/PageSize";
+
 import Search from "../shared/Search";
 import Status from "../shared/Status";
 import Pagination from "../shared/Pagination";
@@ -43,13 +43,6 @@ const Location: React.FC = () => {
   // -------------------------------------------------------------------------------
   // Status Drop down
   const [status, setStatus] = useState<string>("Active");
-
-  // Page Size Dropdown
-  // const [pageSize, setPageSize] = useState(5);
-  // const handlePageSizeChange = (value: number) => {
-  //   setPageSize(value);
-  //   console.log("Selected Page Size:", value);
-  // };
 
   const handleSearch = (searchTerm: string) => {
     // Implement your search logic
