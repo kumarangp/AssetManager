@@ -14,6 +14,7 @@ import {
 import Search from "../shared/Search";
 import Status from "../shared/Status";
 import Pagination from "../shared/Pagination";
+import { PlusSquareOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 
@@ -130,8 +131,8 @@ const Location: React.FC = () => {
         <Title level={3}>Location Master</Title>
         <Button
           type="primary"
-          onClick={handleOpenModal}
-          style={{ marginBottom: "20px" }}
+          onClick={handleOpenModal} icon={<PlusSquareOutlined style={{fontWeight: 900, fontSize: "13px"}} />}
+          style={{ marginBottom: "20px" }}          
         >
           Add Location
         </Button>

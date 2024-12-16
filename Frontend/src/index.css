@@ -23,6 +23,10 @@ body, html, #root {
 input[type='text']  {
   border-color: #909090 !important;
 }
+/* Border for password input */
+.ant-input-password {
+  border-color: #909090 !important;
+}
 
 #SeachInput {
   border-color: #d9d9d9 !important;
@@ -33,10 +37,75 @@ input[type='text']  {
   box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 8px 0px, rgba(0, 0, 0, 0.19) 0px 6px 20px 0px;
 }
 
-.ant-pagination-item .ant-pagination-item-active {
-  border-color: #fa8c15 !important;
+.ant-pagination .ant-pagination-item-active {   
+  border: 1px solid #1677ff;
+}
+.ant-pagination .ant-pagination-item-active a {
+  color: #fff;
+  background: #1677ff;
 }
 
+.ant-pagination .ant-pagination-item-active a:hover {  
+  color: #fff;
+}
+
+/* Search box clear icon */
 .anticon-close-circle:hover {
   color: #fa8c15 !important;
+}
+
+
+
+/* Sidebar styles */
+.ant-menu-item-selected {
+  background-color: #003366 !important; /* Active link background color */
+  color: #fa8c15 !important; /* Active link text color */
+}
+
+.ant-menu-item-selected .anticon {
+  color: #fa8c15 !important; /* Active icon color */  
+}
+
+.ant-menu-item-active, .ant-menu-item-active > .ant-menu-item-icon {
+  color: #fa8c15 !important;  
+}
+
+/* General sidebar font color */
+.ant-menu {
+  /* Default font color -  */
+  color: #038fdd !important; 
+}
+
+.ant-menu-item {
+  font-weight: bold;  
+}
+
+.ant-menu-item-icon {
+  color: #038fdd !important; /* Default icon color #1890ff */
+}
+
+.ant-menu-item .ant-menu-item > .ant-menu-title-content {  
+  font-weight: bold;  
+  color: #038fdd !important;
+}
+
+.ant-menu-submenu-arrow {
+  color: #038fdd !important;
+}
+
+.ant-menu-item .ant-menu-item-selected > .ant-menu-title-content {
+  color: #fa8c15 !important; 
+}
+
+/* Sub menu title */
+.ant-menu-submenu-title > .ant-menu-title-content {
+  font-weight: bold;
+  color: #038fdd;
+}
+
+/* Sub menu open */
+.ant-menu-submenu-open > .ant-menu-submenu-title > .ant-menu-item-icon,
+.ant-menu-submenu-open > .ant-menu-submenu-title > .ant-menu-title-content,
+.ant-menu-submenu-open > .ant-menu-submenu-title > .ant-menu-submenu-arrow {
+  color: white !important;
 }

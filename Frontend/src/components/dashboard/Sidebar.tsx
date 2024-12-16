@@ -3,8 +3,6 @@ import { Menu } from "antd";
 import { SettingFilled, EnvironmentFilled, DashboardFilled } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 
-import './Sidebar.css';
-
 const Sidebar: React.FC = () => {
   // Dynamic Active Key Management
   const navigate = useNavigate();
@@ -34,10 +32,15 @@ const Sidebar: React.FC = () => {
     },
   ];
 
+  // Determine which submenu should be open based on the current location
+  const defaultOpenKeys = location.pathname.startsWith("/settings")
+    ? ["settings"] : [] ;
+
   return (    
     <Menu
       mode="inline"
-      defaultSelectedKeys={[location.pathname]}
+      selectedKeys={[location.pathname]}
+      defaultOpenKeys={defaultOpenKeys}
       style={{ height: "100%", background: "#003366", color: "#038fdd" }}
       onClick={(e) => navigate(e.key)}
       items={menuItems} // Pass the items prop here

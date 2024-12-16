@@ -7,6 +7,8 @@ import {
 
 import { Typography, Button, Avatar, Dropdown, Layout } from "antd";
 import { MenuProps } from "antd";
+import { useNavigate } from "react-router-dom";
+
 const { Title } = Typography;
 const { Header } = Layout;
 
@@ -20,6 +22,14 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({collapsed, toggleSideb
     { label: "Profile", key: "profile" },
     { label: "Logout", key: "logout" }
   ];
+
+  const navigate = useNavigate();
+  const handleMenuClick = ({ key }: { key: string }) => {
+    if (key === "logout") {
+      // Redirect to login page on logout
+      navigate("/login");
+    }
+  };
 
   return (
     <Header
@@ -46,7 +56,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({collapsed, toggleSideb
       </Title>
 
       {/* User Info and Logout */}
-      <Dropdown menu={{ items }} placement="bottomRight">
+      <Dropdown menu={{ items, onClick: handleMenuClick }} placement="bottomRight">
         <div
           style={{
             display: "flex",
