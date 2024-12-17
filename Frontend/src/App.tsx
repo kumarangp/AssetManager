@@ -6,6 +6,7 @@ import ErrorPage from "./components/ErrorPage";
 import Dashboard from "./components/dashboard/Dashboard";
 import Location from "./components/master/Location";
 import Login from "./components/Login";
+import Type from "./components/master/Type";
 
 const App: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/settings/location" element={<Location />} />
+          <Route path="/settings/type" element={<Type />} />
         </Route>
         {/* Error Route */}
         <Route path="*" element={<ErrorPage />} />
