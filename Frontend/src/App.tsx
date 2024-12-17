@@ -7,6 +7,7 @@ import Dashboard from "./components/dashboard/Dashboard";
 import Location from "./components/master/Location";
 import Login from "./components/Login";
 import Type from "./components/master/Type";
+import Category from "./components/master/Category";
 
 const App: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const App: React.FC = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/settings/location" element={<Location />} />
           <Route path="/settings/type" element={<Type />} />
+          <Route path="/settings/category" element={<Category />} />
         </Route>
         {/* Error Route */}
         <Route path="*" element={<ErrorPage />} />

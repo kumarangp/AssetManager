@@ -1,6 +1,6 @@
 import React from "react";
 import { Menu } from "antd";
-import { SettingFilled, EnvironmentFilled, DashboardFilled, DeploymentUnitOutlined } from "@ant-design/icons";
+import { SettingFilled, EnvironmentFilled, DashboardFilled, DeploymentUnitOutlined, TagsFilled } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Sidebar: React.FC = () => {
@@ -32,6 +32,12 @@ const Sidebar: React.FC = () => {
           key: "/settings/type",
           icon: <DeploymentUnitOutlined />,
           label: "Type",
+          style: { color: "#038fdd" }
+        },
+        {
+          key: "/settings/category",
+          icon: <TagsFilled />,
+          label: "Category",
           style: { color: "#038fdd" }
         }
       ],
