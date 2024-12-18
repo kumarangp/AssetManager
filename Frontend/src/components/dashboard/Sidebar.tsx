@@ -28,6 +28,12 @@ const Sidebar: React.FC = () => {
           icon: <EnvironmentFilled />,
           label: "Department",
           style: { color: "#038fdd" }
+        },
+        {
+          key: "/team",
+          icon: <EnvironmentFilled />,
+          label: "Teams",
+          style: { color: "#038fdd" }
         }
       ]
     },

@@ -14,6 +14,7 @@ import ModelNumber from "./components/master/ModelNumber";
 import AssetStatus from "./components/master/AssetStatus";
 import Supplier from "./components/master/Supplier";
 import Department from "./components/master/Department";
+import Team from "./components/master/Team";
 
 const App: React.FC = () => {
   return (
@@ -36,6 +37,7 @@ const App: React.FC = () => {
           <Route path="/settings/assetstatus" element={<AssetStatus />} />
           <Route path="/settings/supplier" element={<Supplier />} />
           <Route path="/department" element={<Department />} />
+          <Route path="/team" element={<Team />} />
         </Route>
         {/* Error Route */}
         <Route path="*" element={<ErrorPage />} />
