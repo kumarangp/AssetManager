@@ -17,12 +17,12 @@ import Status from "../shared/Status";
 
 const { Title } = Typography;
 
-interface AssetStatusData {
+interface DepartmentData {
   key: string;
-  assetStatus: string;
+  Department: string;
 }
 
-const AssetStatus: React.FC = () => {
+const Department: React.FC = () => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,7 +30,7 @@ const AssetStatus: React.FC = () => {
   const [pageSize, setPageSize] = useState<number>(5);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [status, setStatus] = useState<string>("Active");
-  const [assetStatus, setAssetStatus] = useState<AssetStatusData[]>([]);
+  const [departments, setDepartments] = useState<DepartmentData[]>([]);
 
   const handleOpenModal = () => {
     form.resetFields();
@@ -44,32 +44,32 @@ const AssetStatus: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const addOrUpdateAssetStatus = (values: AssetStatusData) => {
+  const addOrUpdateDepartment = (values: DepartmentData) => {
     if (editingKey) {
-      setAssetStatus((prev) =>
+      setDepartments((prev) =>
         prev.map((item) =>
           item.key === editingKey ? { ...item, ...values } : item
         )
       );
-      message.success("Asset status updated successfully!");
+      message.success("Department updated successfully!");
     } else {
-      const newAssetStatus: AssetStatusData = {
+      const newDepartment: DepartmentData = {
         ...values,
         key: Date.now().toString(),
       };
-      setAssetStatus((prev) => [...prev, newAssetStatus]);
-      message.success("Asset status added successfully!");
+      setDepartments((prev) => [...prev, newDepartment]);
+      message.success("Department added successfully!");
     }
     form.resetFields();
     setIsModalOpen(false);
   };
 
-  const deleteAssetStatus = (key: string) => {
-    setAssetStatus((prev) => prev.filter((item) => item.key !== key));
-    message.success("Asset status deleted successfully!");
+  const deleteDepartment = (key: string) => {
+    setDepartments((prev) => prev.filter((item) => item.key !== key));
+    message.success("Department deleted successfully!");
   };
 
-  const startEditing = (record: AssetStatusData) => {
+  const startEditing = (record: DepartmentData) => {
     setEditingKey(record.key);
     form.setFieldsValue(record);
     setIsModalOpen(true);
@@ -79,8 +79,8 @@ const AssetStatus: React.FC = () => {
     setSearchTerm(term);
   };
 
-  const filteredAssetStatus = assetStatus.filter((item) =>
-    item.assetStatus.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredDepartment = departments.filter((item) =>
+    item.Department.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handlePageChange = (page: number, size: number) => {
@@ -89,43 +89,43 @@ const AssetStatus: React.FC = () => {
   };
 
   const columns = [
-    {
-      title: "Asset status",
-      dataIndex: "assetStatus",
-      key: "assetStatus",
-    },
-    {
-      title: "Actions",
-      key: "actions",
-      render: (_: any, record: AssetStatusData) => (
-        <Space>
-          <Button type="link" onClick={() => startEditing(record)}>
-            Edit
-          </Button>
-          <Popconfirm
-            title="Are you sure to delete this asset status?"
-            onConfirm={() => deleteAssetStatus(record.key)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button type="link" danger>
-              Delete
+      {
+        title: "Department",
+        dataIndex: "Department",
+        key: "Department",
+      },
+      {
+        title: "Actions",
+        key: "actions",
+        render: (_: any, record: DepartmentData) => (
+          <Space>
+            <Button type="link" onClick={() => startEditing(record)}>
+              Edit
             </Button>
-          </Popconfirm>
-        </Space>
-      ),
-    },
-  ];
+            <Popconfirm
+              title="Are you sure to delete this department?"
+              onConfirm={() => deleteDepartment(record.key)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="link" danger>
+                Delete
+              </Button>
+            </Popconfirm>
+          </Space>
+        ),
+      },
+    ];
 
   return (
     <div style={{ padding: "20px" }}>
-      <Title level={3}>Asset status</Title>
+      <Title level={3}>Department Details</Title>
       <Button
         type="primary"
         onClick={handleOpenModal}
         style={{ marginBottom: "20px" }}
       >
-        Add Asset Status
+        Add Department
       </Button>
       <div>
         <div style={{ float: "left" }}>
@@ -136,13 +136,13 @@ const AssetStatus: React.FC = () => {
           />
         </div>
         <div style={{ float: "right" }}>
-          <Search placeholder="Search Asset Status" onSearch={handleSearch} />
+          <Search placeholder="Search Department" onSearch={handleSearch} />
         </div>
         <div style={{ clear: "both" }}></div>
       </div>
 
       <Table
-        dataSource={filteredAssetStatus.slice(
+        dataSource={filteredDepartment.slice(
           (currentPage - 1) * pageSize,
           currentPage * pageSize
         )}
@@ -157,13 +157,13 @@ const AssetStatus: React.FC = () => {
 
       <Pagination
         current={currentPage}
-        total={filteredAssetStatus.length}
+        total={filteredDepartment.length}
         pageSize={pageSize}
         onChange={handlePageChange}
       />
 
       <Modal
-        title={editingKey ? "Edit Asset Status" : "Add Asset Status"}
+        title={editingKey ? "Edit Department" : "Add Department"}
         open={isModalOpen}
         onCancel={handleCloseModal}
         footer={[
@@ -175,13 +175,13 @@ const AssetStatus: React.FC = () => {
           </Button>,
         ]}
       >
-        <Form form={form} layout="vertical" onFinish={addOrUpdateAssetStatus}>
+        <Form form={form} layout="vertical" onFinish={addOrUpdateDepartment}>
           <Form.Item
-            label="Asset Status"
-            name="assetStatus"
-            rules={[{ required: true, message: "Asset Status is required!" }]}
+            label="Department Name"
+            name="Department"
+            rules={[{ required: true, message: "Department name is required!" }]}
           >
-            <Input placeholder="Enter asset status"></Input>
+            <Input placeholder="Enter department name"></Input>
           </Form.Item>
         </Form>
       </Modal>
@@ -189,4 +189,4 @@ const AssetStatus: React.FC = () => {
   );
 };
 
-export default AssetStatus;
+export default Department;
