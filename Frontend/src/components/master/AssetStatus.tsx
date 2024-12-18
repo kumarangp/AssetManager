@@ -9,7 +9,6 @@ import {
   message,
   Typography,
   Modal,
-  Select,
 } from "antd";
 
 import Pagination from "../shared/Pagination";
@@ -17,15 +16,13 @@ import Search from "../shared/Search";
 import Status from "../shared/Status";
 
 const { Title } = Typography;
-const { Option } = Select;
 
-interface ModelNumberData {
+interface AssetStatusData {
   key: string;
-  modelName: string;
-  modelNumber: string;
+  assetStatus: string;
 }
 
-const ModelNumber: React.FC = () => {
+const AssetStatus: React.FC = () => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,8 +30,7 @@ const ModelNumber: React.FC = () => {
   const [pageSize, setPageSize] = useState<number>(5);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [status, setStatus] = useState<string>("Active");
-  const [modelNumbers, setModelNumbers] = useState<ModelNumberData[]>([]);
-  const modelNameOptions = ["Vostra", "Insipiron", "Galaxy"];
+  const [assetStatus, setAssetStatus] = useState<AssetStatusData[]>([]);
 
   const handleOpenModal = () => {
     form.resetFields();
@@ -48,29 +44,32 @@ const ModelNumber: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const addOrUpdateModelNumber = (values: ModelNumberData) => {    
+  const addOrUpdateAssetStatus = (values: AssetStatusData) => {
     if (editingKey) {
-      setModelNumbers((prev) => 
-      (prev).map((item) => item.key === editingKey ? {...item, ...values} : item));
-      message.success("Model number updated successfully!");      
+      setAssetStatus((prev) =>
+        prev.map((item) =>
+          item.key === editingKey ? { ...item, ...values } : item
+        )
+      );
+      message.success("Asset status updated successfully!");
     } else {
-        const newModelNumber: ModelNumberData = {
-          ...values,
-          key: Date.now().toString()
-        };
-        setModelNumbers((prev) => [...prev, newModelNumber]);
-        message.success("Model number added successfully!");        
+      const newAssetStatus: AssetStatusData = {
+        ...values,
+        key: Date.now().toString(),
+      };
+      setAssetStatus((prev) => [...prev, newAssetStatus]);
+      message.success("Asset status added successfully!");
     }
     form.resetFields();
     setIsModalOpen(false);
   };
 
-  const deleteModelNumber = (key: string) => {
-    setModelNumbers((prev) => prev.filter((item) => item.key !== key));
-    message.success("Model Number deleted successfully!");
+  const deleteAssetStatus = (key: string) => {
+    setAssetStatus((prev) => prev.filter((item) => item.key !== key));
+    message.success("Asset status deleted successfully!");
   };
 
-  const startEditing = (record: ModelNumberData) => {
+  const startEditing = (record: AssetStatusData) => {
     setEditingKey(record.key);
     form.setFieldsValue(record);
     setIsModalOpen(true);
@@ -80,11 +79,9 @@ const ModelNumber: React.FC = () => {
     setSearchTerm(term);
   };
 
-  const filteredModelNumbers = modelNumbers.filter(
-    (item) =>
-      item.modelName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.modelNumber.toLowerCase().includes(searchTerm.toLowerCase())
-  );  
+  const filteredAssetStatus = assetStatus.filter((item) =>
+    item.assetStatus.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const handlePageChange = (page: number, size: number) => {
     setCurrentPage(page);
@@ -93,50 +90,43 @@ const ModelNumber: React.FC = () => {
 
   const columns = [
     {
-      title: "Model Number",
-      dataIndex: "modelNumber",
-      key: "modelNumber"
-    },
-    {
-      title: "Model Name",
-      dataIndex: "modelName",
-      key: "modelName"
+      title: "Asset status",
+      dataIndex: "assetStatus",
+      key: "assetStatus",
     },
     {
       title: "Actions",
       key: "actions",
-      render: (_: any, record: ModelNumberData) => (
+      render: (_: any, record: AssetStatusData) => (
         <Space>
-          <Button type="link"
-            onClick={() => startEditing(record)}
-            >
-              Edit
+          <Button type="link" onClick={() => startEditing(record)}>
+            Edit
           </Button>
-          <Popconfirm 
-            title="Are you sure to delete this model number?"
-            onConfirm={() => deleteModelNumber(record.key)}
+          <Popconfirm
+            title="Are you sure to delete this asset status?"
+            onConfirm={() => deleteAssetStatus(record.key)}
             okText="Yes"
             cancelText="No"
           >
-            <Button type="link" danger>Delete
+            <Button type="link" danger>
+              Delete
             </Button>
           </Popconfirm>
         </Space>
-      )
-    }
+      ),
+    },
   ];
 
   return (
     <div style={{ padding: "20px" }}>
-      <Title level={3}>Model Number & Model Name Master</Title>
+      <Title level={3}>Asset status</Title>
       <Button
         type="primary"
         onClick={handleOpenModal}
         style={{ marginBottom: "20px" }}
       >
-        Add Model Number
+        Add Asset Status
       </Button>
-
       <div>
         <div style={{ float: "left" }}>
           <Status
@@ -146,13 +136,13 @@ const ModelNumber: React.FC = () => {
           />
         </div>
         <div style={{ float: "right" }}>
-          <Search placeholder="Search Model Number" onSearch={handleSearch} />
+          <Search placeholder="Search Asset Status" onSearch={handleSearch} />
         </div>
         <div style={{ clear: "both" }}></div>
       </div>
 
       <Table
-        dataSource={filteredModelNumbers.slice(
+        dataSource={filteredAssetStatus.slice(
           (currentPage - 1) * pageSize,
           currentPage * pageSize
         )}
@@ -167,7 +157,7 @@ const ModelNumber: React.FC = () => {
 
       <Pagination
         current={currentPage}
-        total={filteredModelNumbers.length}
+        total={filteredAssetStatus.length}
         pageSize={pageSize}
         onChange={handlePageChange}
       />
@@ -185,27 +175,13 @@ const ModelNumber: React.FC = () => {
           </Button>,
         ]}
       >
-        <Form form={form} layout="vertical" onFinish={addOrUpdateModelNumber}>
+        <Form form={form} layout="vertical" onFinish={addOrUpdateAssetStatus}>
           <Form.Item
-            label="Model Name"
-            name="modelName"
-            rules={[{ required: true, message: "Model name is required!" }]}
+            label="Asset Status"
+            name="assetStatus"
+            rules={[{ required: true, message: "Asset Status is required!" }]}
           >
-            <Select placeholder="Select Model">
-              {modelNameOptions.map((option) => (
-                <Option key={option} value={option}>
-                  {option}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-
-          <Form.Item
-            label="Model Number"
-            name="modelNumber"
-            rules={[{ required: true, message: "Model number is required!" }]}
-          >
-            <Input placeholder="Enter model number"></Input>
+            <Input placeholder="Enter asset status"></Input>
           </Form.Item>
         </Form>
       </Modal>
@@ -213,4 +189,4 @@ const ModelNumber: React.FC = () => {
   );
 };
 
-export default ModelNumber;
+export default AssetStatus;

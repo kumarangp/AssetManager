@@ -11,6 +11,7 @@ import Category from "./components/master/Category";
 import Manufacturer from "./components/master/Manufacturer";
 import Model from "./components/master/Model";
 import ModelNumber from "./components/master/ModelNumber";
+import AssetStatus from "./components/master/AssetStatus";
 
 const App: React.FC = () => {
   return (
@@ -30,6 +31,7 @@ const App: React.FC = () => {
           <Route path="/settings/manufacturer" element={<Manufacturer />} />
           <Route path="/settings/model" element={<Model />} />
           <Route path="/settings/modelnumber" element={<ModelNumber />} />
+          <Route path="/settings/assetstatus" element={<AssetStatus />} />
         </Route>
         {/* Error Route */}
         <Route path="*" element={<ErrorPage />} />
