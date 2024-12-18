@@ -45,6 +45,12 @@ const Sidebar: React.FC = () => {
           icon: <TagsFilled />,
           label: "Manufacturer",
           style: { color: "#038fdd" }
+        },
+        {
+          key: "/settings/model",
+          icon: <TagsFilled />,
+          label: "Model",
+          style: { color: "#038fdd" }
         }
       ],
     },

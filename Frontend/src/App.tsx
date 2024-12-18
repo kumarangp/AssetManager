@@ -9,6 +9,7 @@ import Login from "./components/Login";
 import Type from "./components/master/Type";
 import Category from "./components/master/Category";
 import Manufacturer from "./components/master/Manufacturer";
+import Model from "./components/master/Model";
 
 const App: React.FC = () => {
   return (
@@ -26,6 +27,7 @@ const App: React.FC = () => {
           <Route path="/settings/type" element={<Type />} />
           <Route path="/settings/category" element={<Category />} />
           <Route path="/settings/manufacturer" element={<Manufacturer />} />
+          <Route path="/settings/model" element={<Model />} />
         </Route>
         {/* Error Route */}
         <Route path="*" element={<ErrorPage />} />
