@@ -34,6 +34,12 @@ const Sidebar: React.FC = () => {
           icon: <EnvironmentFilled />,
           label: "Teams",
           style: { color: "#038fdd" }
+        },
+        {
+          key: "/employee",
+          icon: <EnvironmentFilled />,
+          label: "Employees",
+          style: { color: "#038fdd" }
         }
       ]
     },
