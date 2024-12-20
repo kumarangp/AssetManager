@@ -15,7 +15,21 @@ const Sidebar: React.FC = () => {
       key: "/dashboard",
       icon: <DashboardFilled />,
       label: "Dashboard",
+      style: { color: "#038fdd" }      
+    },
+    {
+      key: "transaction",
+      icon: <SettingFilled />,
+      label: "Transaction",
       style: { color: "#038fdd" },
+      children: [
+        {
+          key: "/invoice",
+          icon: <EnvironmentFilled />,
+          label: "Invoice",
+          style: { color: "#038fdd" }
+        }
+      ]
     },
     {
       key: "users",
@@ -108,6 +122,7 @@ const Sidebar: React.FC = () => {
       : location.pathname.startsWith("/department") || 
         location.pathname.startsWith("/employee") || 
         location.pathname.startsWith("/team") ? ["users"] 
+      : location.pathname.startsWith("/invoice") ? ["transaction"]
       : [];
 
   return (    

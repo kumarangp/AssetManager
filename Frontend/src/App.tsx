@@ -16,6 +16,7 @@ import Supplier from "./components/master/Supplier";
 import Department from "./components/master/Department";
 import Team from "./components/master/Team";
 import Employee from "./components/master/Employee";
+import Invoice from "./components/transaction/Invoice";
 
 const App: React.FC = () => {
   return (
@@ -39,7 +40,8 @@ const App: React.FC = () => {
           <Route path="/settings/supplier" element={<Supplier />} />
           <Route path="/department" element={<Department />} />
           <Route path="/team" element={<Team />} />
-          <Route path="/employee" element={<Employee />} />          
+          <Route path="/employee" element={<Employee />} />
+          <Route path="/invoice" element={<Invoice />} />          
         </Route>
         {/* Error Route */}
         <Route path="*" element={<ErrorPage />} />

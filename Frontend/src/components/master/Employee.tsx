@@ -269,7 +269,7 @@ const Employee: React.FC = () => {
               <Form.Item
                 label="First Name"
                 name="FirstName"
-                rules={[{ required: true, message: "First Name is required!" }]}
+                rules={[{ required: true, message: "First name is required!" }]}
               >
                 <Input placeholder="Enter First Name"></Input>
               </Form.Item>
@@ -290,7 +290,7 @@ const Employee: React.FC = () => {
               <Form.Item
                 label="Last Name"
                 name="LastName"
-                rules={[{ required: true, message: "Last Name is required!" }]}
+                rules={[{ required: true, message: "Last name is required!" }]}
               >
                 <Input placeholder="Enter Last Name"></Input>
               </Form.Item>
@@ -329,7 +329,7 @@ const Employee: React.FC = () => {
               <Form.Item
                 label="Username"
                 name="Username"
-                rules={[{ required: true, message: "User Name is required!" }]}
+                rules={[{ required: true, message: "User name is required!" }]}
               >
                 <Input placeholder="Enter Username"></Input>
               </Form.Item>
