@@ -1,6 +1,12 @@
 import React from "react";
 import { Menu } from "antd";
-import { SettingFilled, EnvironmentFilled, DashboardFilled, DeploymentUnitOutlined, TagsFilled } from "@ant-design/icons";
+import { SettingFilled, 
+  EnvironmentFilled, 
+  DashboardFilled, 
+  TagsFilled, ShoppingOutlined, AppstoreOutlined, ProductOutlined,
+  FundProjectionScreenOutlined, NumberOutlined, CheckCircleOutlined,
+  TeamOutlined, ClusterOutlined, UserAddOutlined, FileTextOutlined
+} from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 
 
@@ -25,7 +31,7 @@ const Sidebar: React.FC = () => {
       children: [
         {
           key: "/invoice",
-          icon: <EnvironmentFilled />,
+          icon: <FileTextOutlined />,
           label: "Invoice",
           style: { color: "#038fdd" }
         }
@@ -39,19 +45,19 @@ const Sidebar: React.FC = () => {
       children: [
         {
           key: "/department",
-          icon: <EnvironmentFilled />,
+          icon: <ClusterOutlined />,
           label: "Department",
           style: { color: "#038fdd" }
         },
         {
           key: "/team",
-          icon: <EnvironmentFilled />,
+          icon: <TeamOutlined />,
           label: "Teams",
           style: { color: "#038fdd" }
         },
         {
           key: "/employee",
-          icon: <EnvironmentFilled />,
+          icon: <UserAddOutlined />,
           label: "Employees",
           style: { color: "#038fdd" }
         }
@@ -71,7 +77,7 @@ const Sidebar: React.FC = () => {
         },
         {
           key: "/settings/type",
-          icon: <DeploymentUnitOutlined />,
+          icon: <ProductOutlined />,
           label: "Type",
           style: { color: "#038fdd" }
         },
@@ -83,31 +89,31 @@ const Sidebar: React.FC = () => {
         },
         {
           key: "/settings/supplier",
-          icon: <TagsFilled />,
+          icon: <ShoppingOutlined />,
           label: "Supplier",
           style: { color: "#038fdd" }
         },
         {
           key: "/settings/manufacturer",
-          icon: <TagsFilled />,
+          icon: <AppstoreOutlined />,
           label: "Manufacturer",
           style: { color: "#038fdd" }
         },
         {
           key: "/settings/model",
-          icon: <TagsFilled />,
+          icon: <FundProjectionScreenOutlined />,
           label: "Model",
           style: { color: "#038fdd" }
         },
         {
           key: "/settings/modelnumber",
-          icon: <TagsFilled />,
+          icon: <NumberOutlined />,
           label: "Model Number",
           style: { color: "#038fdd" }
         },
         {
           key: "/settings/assetstatus",
-          icon: <TagsFilled />,
+          icon: <CheckCircleOutlined />,
           label: "Asset Status",
           style: { color: "#038fdd" }
         }       

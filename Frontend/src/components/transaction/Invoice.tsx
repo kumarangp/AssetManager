@@ -25,13 +25,15 @@ import Status from "../shared/Status";
 const { Title } = Typography;
 const { Option } = Select;
 
+
+
 interface InvoiceData {
   key: string;
-  PoDate: string | null; // Changed to string
+  PoDate: Date | null;  // Using Date instead of string
   PoNumber: string;
   PoCost: number;
   Supplier: string;
-  InvoiceDate: string | null; // Changed to string
+  InvoiceDate: Date | null;  // Using Date instead of string
   InvoiceNumber: string;
   Location: string;
   PoFilePath: string;
@@ -103,9 +105,9 @@ const Invoice: React.FC = () => {
   const addOrUpdateInvoice = (values: any) => {
     const updatedInvoiceDetails = {
       ...values,
-      PoDate: values.PoDate ? values.PoDate.format("YYYY-MM-DD") : null,
+      PoDate: values.PoDate ? values.PoDate.toDate() : null,
       InvoiceDate: values.InvoiceDate
-        ? values.InvoiceDate.format("YYYY-MM-DD")
+        ? values.InvoiceDate.toDate()
         : null,
     };
 
@@ -155,10 +157,10 @@ const Invoice: React.FC = () => {
 
   const filteredInvoice = invoiceDetails.filter(
     (item) =>
-      item.InvoiceDate?.toString().includes(searchTerm.toLowerCase()) ||
+      (item.InvoiceDate && moment(item.InvoiceDate).format("MM/DD/YYYY").includes(searchTerm.toLowerCase())) ||
       item.InvoiceNumber.toString().includes(searchTerm.toLowerCase()) ||
-      item.Supplier.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.PoDate?.toString().includes(searchTerm.toLowerCase()) ||
+      item.Supplier.toLowerCase().includes(searchTerm.toLowerCase()) ||      
+      (item.PoDate && moment(item.PoDate).format("MM/DD/YYYY").includes(searchTerm.toLowerCase())) ||
       item.PoNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.PoCost.toString().includes(searchTerm.toLowerCase())
   );
@@ -168,7 +170,7 @@ const Invoice: React.FC = () => {
       title: "Invoice Date",
       dataIndex: "InvoiceDate",
       key: "InvoiceDate",
-      render: (date: string | null) => {
+      render: (date: Date | null) => {
         return date ? moment(date).format("MM/DD/YYYY") : "N/A";
       },
     },    
@@ -186,7 +188,7 @@ const Invoice: React.FC = () => {
       title: "Po Date",
       dataIndex: "PoDate",
       key: "PoDate",
-      render: (date: string | null) => {
+      render: (date: Date | null) => {
         return date ? moment(date).format("MM/DD/YYYY") : "N/A";
       },
     },
