@@ -5,7 +5,7 @@ import { SettingFilled,
   DashboardFilled, 
   TagsFilled, ShoppingOutlined, AppstoreOutlined, ProductOutlined,
   FundProjectionScreenOutlined, NumberOutlined, CheckCircleOutlined,
-  TeamOutlined, ClusterOutlined, UserAddOutlined, FileTextOutlined
+  TeamOutlined, ClusterOutlined, UserAddOutlined, FileTextOutlined, LaptopOutlined
 } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -33,6 +33,12 @@ const Sidebar: React.FC = () => {
           key: "/invoice",
           icon: <FileTextOutlined />,
           label: "Invoice",
+          style: { color: "#038fdd" }
+        },
+        {
+          key: "/asset",
+          icon: <LaptopOutlined />,
+          label: "All Assets",
           style: { color: "#038fdd" }
         }
       ]
@@ -128,7 +134,8 @@ const Sidebar: React.FC = () => {
       : location.pathname.startsWith("/department") || 
         location.pathname.startsWith("/employee") || 
         location.pathname.startsWith("/team") ? ["users"] 
-      : location.pathname.startsWith("/invoice") ? ["transaction"]
+      : location.pathname.startsWith("/invoice") || 
+      location.pathname.startsWith("/asset") ? ["transaction"]
       : [];
 
   return (    

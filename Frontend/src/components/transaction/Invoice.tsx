@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import moment from "moment";
+import moment, { Moment } from "moment";
 import {
   Button,
   Form,
@@ -16,7 +16,8 @@ import {
   DatePicker,
   Upload,
 } from "antd";
-import { UploadOutlined, CloudDownloadOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
+import type { UploadFile } from "antd/es/upload/interface";
 
 import Pagination from "../shared/Pagination";
 import Search from "../shared/Search";
@@ -25,15 +26,28 @@ import Status from "../shared/Status";
 const { Title } = Typography;
 const { Option } = Select;
 
-
-
-interface InvoiceData {
+// Interface for form values (used by Form component)
+interface InvoiceFormValues {
   key: string;
-  PoDate: Date | null;  // Using Date instead of string
+  PoDate: Moment | null;
   PoNumber: string;
   PoCost: number;
   Supplier: string;
-  InvoiceDate: Date | null;  // Using Date instead of string
+  InvoiceDate: Moment | null;
+  InvoiceNumber: string;
+  Location: string;
+  PoFilePath: string;
+  InvoiceFilePath: string;
+}
+
+// Interface for stored data
+interface InvoiceData {
+  key: string;
+  PoDate: Date | null;
+  PoNumber: string;
+  PoCost: number;
+  Supplier: string;
+  InvoiceDate: Date | null;
   InvoiceNumber: string;
   Location: string;
   PoFilePath: string;
@@ -41,7 +55,7 @@ interface InvoiceData {
 }
 
 const Invoice: React.FC = () => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<InvoiceFormValues>();
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -49,22 +63,19 @@ const Invoice: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [status, setStatus] = useState<string>("Active");
   const [invoiceDetails, setInvoiceDetails] = useState<InvoiceData[]>([]);
+  const [poFileList, setPoFileList] = useState<UploadFile[]>([]);
+  const [invoiceFileList, setInvoiceFileList] = useState<UploadFile[]>([]);
+  const [poCost, setPoCost] = useState<string>("");
 
   const SupplierOptions = ["Supplier 1", "Supplier 2", "Supplier 3"];
   const LocationOptions = ["AKS", "USA"];
 
-  const [poFileList, setPoFileList] = useState<any[]>([]);
-  const [invoiceFileList, setinvoiceFileList] = useState<any[]>([]);
-
-  // Handle file change (after upload)
   const handlePoFileUpload = (info: any) => {
     if (info.file.status === "done") {
       message.success(`${info.file.name} file uploaded successfully`);
     } else if (info.file.status === "error") {
       message.error(`${info.file.name} file upload failed.`);
     }
-
-    // Update the fileList when the file changes (e.g., uploaded, removed)
     setPoFileList(info.fileList);
   };
 
@@ -74,18 +85,13 @@ const Invoice: React.FC = () => {
     } else if (info.file.status === "error") {
       message.error(`${info.file.name} file upload failed.`);
     }
-
-    // Update the fileList when the file changes (e.g., uploaded, removed)
-    setinvoiceFileList(info.fileList);
+    setInvoiceFileList(info.fileList);
   };
 
-  // Handle before file upload
-  const beforeUpload = (file: any) => {
-    const isValid = file.type === "image/jpeg" || 
-                    file.type === "image/png" ||
-                    file.type === "application/pdf";
+  const beforeUpload = (file: File) => {
+    const isValid = file.type === "image/jpeg" || file.type === "image/png";
     if (!isValid) {
-      message.error("You can only upload JPG/PNG/pdf files!");
+      message.error("You can only upload JPG/PNG files!");
     }
     return isValid;
   };
@@ -102,13 +108,11 @@ const Invoice: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const addOrUpdateInvoice = (values: any) => {
+  const addOrUpdateInvoice = (values: InvoiceFormValues) => {
     const updatedInvoiceDetails = {
       ...values,
       PoDate: values.PoDate ? values.PoDate.toDate() : null,
-      InvoiceDate: values.InvoiceDate
-        ? values.InvoiceDate.toDate()
-        : null,
+      InvoiceDate: values.InvoiceDate ? values.InvoiceDate.toDate() : null,
     };
 
     if (editingKey) {
@@ -124,7 +128,7 @@ const Invoice: React.FC = () => {
         key: Date.now().toString(),
       };
       setInvoiceDetails((prev) => [...prev, newInvoice]);
-      message.success("Invoice Details added successfully!");
+      message.success("Invoice details added successfully!");
     }
 
     form.resetFields();
@@ -133,7 +137,7 @@ const Invoice: React.FC = () => {
 
   const deleteInvoice = (key: string) => {
     setInvoiceDetails((prev) => prev.filter((item) => item.key !== key));
-    message.success("Invoice Details deleted successfully!");
+    message.success("Invoice details deleted successfully!");
   };
 
   const startEditing = (record: InvoiceData) => {
@@ -155,15 +159,27 @@ const Invoice: React.FC = () => {
     setPageSize(size);
   };
 
-  const filteredInvoice = invoiceDetails.filter(
-    (item) =>
-      (item.InvoiceDate && moment(item.InvoiceDate).format("MM/DD/YYYY").includes(searchTerm.toLowerCase())) ||
-      item.InvoiceNumber.toString().includes(searchTerm.toLowerCase()) ||
-      item.Supplier.toLowerCase().includes(searchTerm.toLowerCase()) ||      
-      (item.PoDate && moment(item.PoDate).format("MM/DD/YYYY").includes(searchTerm.toLowerCase())) ||
-      item.PoNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.PoCost.toString().includes(searchTerm.toLowerCase())
-  );
+  const handlePoCost = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    const regex = /^[0-9]+(\.[0-9]+)?$/;
+    if (regex.test(newValue)) {
+      setPoCost(newValue);
+    }
+  };
+
+  const filteredInvoice = invoiceDetails.filter((item) => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      (item.InvoiceDate &&
+        moment(item.InvoiceDate).format("MM/DD/YYYY").includes(searchLower)) ||
+      item.InvoiceNumber.toLowerCase().includes(searchLower) ||
+      item.Supplier.toLowerCase().includes(searchLower) ||
+      (item.PoDate &&
+        moment(item.PoDate).format("MM/DD/YYYY").includes(searchLower)) ||
+      item.PoNumber.toLowerCase().includes(searchLower) ||
+      item.PoCost.toString().includes(searchLower)
+    );
+  });
 
   const columns = [
     {
@@ -173,7 +189,7 @@ const Invoice: React.FC = () => {
       render: (date: Date | null) => {
         return date ? moment(date).format("MM/DD/YYYY") : "N/A";
       },
-    },    
+    },
     {
       title: "Invoice Number",
       dataIndex: "InvoiceNumber",
@@ -206,25 +222,11 @@ const Invoice: React.FC = () => {
       title: "Invoice",
       dataIndex: "InvoiceFilePath",
       key: "InvoiceFilePath",
-      render: (InvoiceFile: string | null) => {
-        return InvoiceFile ? (
-          <a href="javascript:;" target="_self" rel="noopener noreferrer">
-            <CloudDownloadOutlined style={{ fontSize: "18px", color: "#1890ff" }} />
-          </a>
-        ) : ("")
-      }
     },
     {
       title: "Po",
       dataIndex: "PoFilePath",
       key: "PoFilePath",
-      render: (PoFile: string | null) => {
-        return PoFile ? (
-          <a href="javascript:;" target="_self" rel="noopener noreferrer">
-            <CloudDownloadOutlined style={{ fontSize: "18px", color: "#1890ff" }} />
-          </a>
-        ) : ("")
-      }
     },
     {
       title: "Actions",
@@ -248,17 +250,6 @@ const Invoice: React.FC = () => {
       ),
     },
   ];
-
-  const [poCost, setPoCost] = useState<string>("");
-  const handlePoCost = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    // Regex for numbers and fractions (e.g., 1/2, 3.14, 0.5)
-    const regex = /^[0-9]+(\.[0-9]+)?$/;
-    // Update state only if input matches the allowed pattern
-    if (regex.test(newValue)) {
-      setPoCost(newValue);
-    }
-  };
 
   return (
     <div style={{ padding: "20px" }}>
@@ -285,7 +276,8 @@ const Invoice: React.FC = () => {
       </div>
 
       <Table
-        dataSource={invoiceDetails}
+        dataSource={filteredInvoice.slice(
+          (currentPage - 1) * pageSize, currentPage * pageSize)}
         columns={columns}
         rowKey="key"
         pagination={false}
@@ -338,7 +330,7 @@ const Invoice: React.FC = () => {
                 </Select>
               </Form.Item>
               <Form.Item label="Location" name="Location">
-                <Select placeholder="Supplier">
+                <Select placeholder="Location">
                   {LocationOptions.map((option) => (
                     <Option key={option} value={option}>
                       {option}
@@ -349,7 +341,7 @@ const Invoice: React.FC = () => {
             </Col>
             <Col span={6}>
               <Form.Item label="Purchase order number" name="PoNumber">
-                <Input placeholder="Enter PO Number"></Input>
+                <Input placeholder="Enter PO Number" />
               </Form.Item>
               <Form.Item
                 label="Invoice Date"
@@ -360,10 +352,9 @@ const Invoice: React.FC = () => {
               >
                 <DatePicker size="small" format="MM/DD/YYYY" />
               </Form.Item>
-
               <Form.Item label="Upload PO" name="PoFilePath">
                 <Upload
-                  fileList={poFileList} // Use fileList instead of value
+                  fileList={poFileList}
                   onChange={handlePoFileUpload}
                   beforeUpload={beforeUpload}
                   multiple={false}
@@ -378,7 +369,7 @@ const Invoice: React.FC = () => {
                   placeholder="Enter PO Cost"
                   value={poCost}
                   onChange={handlePoCost}
-                ></Input>
+                />
               </Form.Item>
               <Form.Item
                 label="Invoice Number"
@@ -387,12 +378,11 @@ const Invoice: React.FC = () => {
                   { required: true, message: "Invoice number is required!" },
                 ]}
               >
-                <Input placeholder="Enter Invoice Number"></Input>
+                <Input placeholder="Enter Invoice Number" />
               </Form.Item>
-
               <Form.Item label="Upload Invoice" name="InvoiceFilePath">
                 <Upload
-                  fileList={invoiceFileList} // Use fileList instead of value
+                  fileList={invoiceFileList}
                   onChange={handleInvoiceFileUpload}
                   beforeUpload={beforeUpload}
                   multiple={false}
