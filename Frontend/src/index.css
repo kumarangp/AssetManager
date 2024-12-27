@@ -19,13 +19,32 @@ body, html, #root {
   font-weight: 600;
 }
 
-/* Input text box border color */
-input[type='text']  {
+input[type='text'],   /* Input text box border color */
+textarea,             /* Text area box border color */
+.ant-picker-outlined, /* Date picker */
+.ant-checkbox .ant-checkbox-inner, /* Checkbox border */
+.ant-select-selector, /* Drop down box border color */
+.ant-input-password   /* Border for password input */ {
   border-color: #909090 !important;
 }
-/* Border for password input */
-.ant-input-password {
-  border-color: #909090 !important;
+
+/* Drop down arrow and Calendar Icon */
+.ant-select-arrow, .ant-picker-suffix {
+  color: #909090 !important;
+}
+
+/* Remove border color for status drop down */
+.customStatus .ant-select-selector {
+  border: none !important;
+}
+/* Border radius for status drop down */
+.customStatus > .ant-select {
+  border-radius: 5px !important;
+}
+
+/* Checkbox checked */
+.ant-checkbox-checked .ant-checkbox-inner {
+  border: none;
 }
 
 #SeachInput {
@@ -49,12 +68,20 @@ input[type='text']  {
   color: #fff;
 }
 
+
+/* Remove pagination border */
+.customPagination > .ant-pagination-options .ant-select-selector{
+  border: none;  
+}
+/* border radius for pagination */
+.customPagination > .ant-pagination-options {
+  border-radius: 4px;
+}
+
 /* Search box clear icon */
 .anticon-close-circle:hover {
   color: #fa8c15 !important;
 }
-
-
 
 /* Sidebar styles */
 .ant-menu-item-selected {
@@ -109,3 +136,16 @@ input[type='text']  {
 .ant-menu-submenu-open > .ant-menu-submenu-title > .ant-menu-submenu-arrow {
   color: white !important;
 }
+
+/* Date input height */
+.ant-picker-input {
+  height: 30px;
+}
+
+/* Modal header color */
+.ant-modal-title {
+  color: #056dff !important;
+  font-weight: bold !important;
+}
+
+

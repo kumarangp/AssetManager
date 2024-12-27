@@ -1,15 +1,16 @@
 import React from "react";
-import { Select } from "antd";
+import { Select } from "antd"; 
 
 const { Option } = Select;
 
 interface StatusProps {
   type?: "Default" | "AssetStatus"; // Determines which dropdown to show
   value: string; // Current Selected value
-  onChange: (value: string) => void; // Function to handle change
+  onChange: (value: string) => void; // Function to handle change  
+  width?: number | string;
 }
 
-const Status: React.FC<StatusProps> = ({ type = "Default", value, onChange }) => {
+const Status: React.FC<StatusProps> = ({ type = "Default", value, onChange, width = 100 }) => {
   // Options for both dropdowns
   const defaultOptions = ["Active", "Inactive"];
   const assetStatusOptions = [
@@ -21,13 +22,13 @@ const Status: React.FC<StatusProps> = ({ type = "Default", value, onChange }) =>
   const options = type === "AssetStatus" ? assetStatusOptions : defaultOptions;
 
   return (
-    <div>
+    <div className="customStatus">
       <h4>Status:</h4>
       <Select
         value={value}
         onChange={onChange}
-        style={{ width: 100, boxShadow: "rgba(0, 0, 0, 0.08) 0px 0px 2px 2px" }}
-        placeholder="Select Status" 
+        style={{ width: width, boxShadow: "rgba(0, 0, 0, 0.08) 0px 0px 2px 2px" }}
+        placeholder="Select Status"         
       >
         {
           options.map((option) =>

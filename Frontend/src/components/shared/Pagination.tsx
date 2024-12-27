@@ -15,7 +15,7 @@ const Pagination: React.FC<PaginationProps> = ({ current, total, pageSize, onCha
   return (
     <div style={{ textAlign: "center", marginTop: "16px" }}>
       <div style={{ float: "left" }}>
-        <AntPagination
+        <AntPagination className="customPagination"
           current={current}
           total={total}
           pageSize={pageSize}
