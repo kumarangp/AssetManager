@@ -15,11 +15,14 @@ import {
   Col,
   DatePicker,
   Checkbox,
+  Tooltip,
 } from "antd";
+import { DeleteOutlined, UserDeleteOutlined, UserOutlined, EditOutlined } from "@ant-design/icons";
 
 import Pagination from "../shared/Pagination";
 import Search from "../shared/Search";
 import Status from "../shared/Status";
+
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -71,8 +74,14 @@ interface AssetFormValues {
   serialRows: SerialTableRow[];
 }
 
+interface AssignAsset_to_user {  
+  key: string;
+  AssignUser: string;  
+}
+
 const Asset: React.FC = () => {
   const [form] = Form.useForm<AssetFormValues>();
+  const [assignAssetToUserform] = Form.useForm<AssignAsset_to_user>();
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -97,8 +106,8 @@ const Asset: React.FC = () => {
     "Model Number 3",
   ];
   const InvoiceNumberOptions = [
-    "Invoice number 1",
-    "Invoice number 2",
+    "Inv-001-12-24",
+    "Inv-258-04-23",
     "Invoice number 3",
   ];
 
@@ -277,69 +286,58 @@ const Asset: React.FC = () => {
   const filteredAsset = assetDetails.filter((item) => {
     const searchLower = searchTerm.toLowerCase();
     return (
-      // (item.AssignedDate && moment(item.AssignedDate).format("MM/DD/YYYY").includes(searchLower)) ||
-      item.InvoiceNumber?.toLowerCase().includes(searchLower) ||
-      // item.AssetTag?.toLowerCase().includes(searchLower) ||
-      // item.Category?.toLowerCase().includes(searchLower) ||
-      // item.AssetType?.toLowerCase().includes(searchLower) ||
+      item.AssetCategory?.toLowerCase().includes(searchLower) ||
+      item.WarrantyExpiration?.toString().includes(searchLower) ||
       item.Manufacturer?.toLowerCase().includes(searchLower) ||
-      // item.Serial?.toLowerCase().includes(searchLower) ||
-      // item.AssignedUser?.toLowerCase().includes(searchLower)
-      item.Model?.toLowerCase().includes(searchLower)
+      item.Model?.toLowerCase().includes(searchLower) ||
+      item.ModelNumber?.toLowerCase().includes(searchLower) ||
+      item.Location?.toLowerCase().includes(searchLower) ||
+      (item.AssignedDate && moment(item.AssignedDate).format("MM/DD/YYYY").includes(searchLower)) ||
+      item.SupplierName?.toLowerCase().includes(searchLower) ||
+      item.InvoiceNumber?.toLowerCase().includes(searchLower) ||
+      
+      item.AssetTag?.toLowerCase().includes(searchLower) ||      
+      item.AssetType?.toLowerCase().includes(searchLower) ||      
+      item.Serial?.toLowerCase().includes(searchLower) ||
+      item.AssignedUser?.toLowerCase().includes(searchLower) ||
+      item.AssetStatus?.toLowerCase().includes(searchLower) ||   
+      item.AssignedUser?.toLowerCase().includes(searchLower) ||
+      item.AssignedUserId?.toLowerCase().includes(searchLower) ||
+      item.AssignedToAsset?.toLowerCase().includes(searchLower) ||
+      item.Remarks?.toLowerCase().includes(searchLower)       
     );
   });
 
+  const [isAssignModalVisible, setIsAssignModalVisible] = useState(false);
+  // Show the modal
+  const showAssignModal = () => {
+    setIsAssignModalVisible(true);     
+  };
+   // Close the modal
+  const handleAssignModalCancel = () => {
+    setIsAssignModalVisible(false);    
+    assignAssetToUserform.resetFields();
+  };
+  // Assign asset 
+  const handleAssignAsset = () => {
+    // Add assign modal form submit logic here     
+    console.log("Assign asset to the user - Submit");
+    setIsAssignModalVisible(false); 
+  };
+
+  const sampleUser = ['Sample user 1', 'Sample user 2'];
+
   const columns = [
-    {
-      title: "Invoice Date",
-      dataIndex: "InvoiceDate",
-      key: "InvoiceDate",
-    },
-    {
-      title: "Invoice#",
-      dataIndex: "InvoiceNumber",
-      key: "InvoiceNumber",
-    },
-    {
-      title: "Asset Tag",
-      dataIndex: "AssetTag",
-      key: "AssetTag",
-    },
-    {
-      title: "Category",
-      dataIndex: "AssetCategory",
-      key: "AssetCategory",
-    },
-    {
-      title: "Asset Type",
-      dataIndex: "AssetType",
-      key: "AssetType",
-    },
-    {
-      title: "Manufacturer",
-      dataIndex: "Manufacturer",
-      key: "Manufacturer",
-    },
-    {
-      title: "Model",
-      dataIndex: "Model",
-      key: "Model",
-    },
-    {
-      title: "Serial",
-      dataIndex: "Serial",
-      key: "Serial",
-    },
-    {
-      title: "Status",
-      dataIndex: "AssetStatus",
-      key: "AssetStatus",
-    },
-    {
-      title: "Assigned User",
-      dataIndex: "AssignedUser",
-      key: "AssignedUser",
-    },
+    { title: "Invoice Date", dataIndex: "InvoiceDate", key: "InvoiceDate" },
+    { title: "Invoice#", dataIndex: "InvoiceNumber", key: "InvoiceNumber" },
+    { title: "Asset Tag", dataIndex: "AssetTag", key: "AssetTag" },
+    { title: "Category", dataIndex: "AssetCategory", key: "AssetCategory" },
+    { title: "Asset Type", dataIndex: "AssetType", key: "AssetType" },
+    { title: "Manufacturer", dataIndex: "Manufacturer", key: "Manufacturer" },
+    { title: "Model", dataIndex: "Model", key: "Model" },
+    { title: "Serial", dataIndex: "Serial", key: "Serial" },
+    { title: "Status", dataIndex: "AssetStatus", key: "AssetStatus" },
+    { title: "Assigned User", dataIndex: "AssignedUser", key: "AssignedUser" },
     {
       title: "Assigned User Id",
       dataIndex: "AssignedUserId",
@@ -350,43 +348,119 @@ const Asset: React.FC = () => {
       dataIndex: "AssignedToAsset",
       key: "AssignedToAsset",
     },
-    {
-      title: "Location",
-      dataIndex: "Location",
-      key: "Location",
-    },
+    { title: "Location", dataIndex: "Location", key: "Location" },
     {
       title: "Warranty",
       dataIndex: "WarrantyExpiration",
       key: "WarrantyExpiration",
     },
-    {
-      title: "Remarks",
-      dataIndex: "Remarks",
-      key: "Remarks",
-    },
+    { title: "Remarks", dataIndex: "Remarks", key: "Remarks" },
     {
       title: "Actions",
       key: "actions",
       render: (_: any, record: AssetData) => (
         <Space>
-          <Button type="link" onClick={() => startEditing(record)}>
-            Edit
-          </Button>
+          {(record.AssetStatus === "In Store" ||
+            record.AssetStatus === "Assigned" ||
+            record.AssetStatus === "Installed") && (
+            <Tooltip title="Edit asset">
+              {/* EDIT Button */}
+              <Button
+                type="primary"
+                icon={<EditOutlined />}
+                shape="circle"
+                style={{
+                  backgroundColor: "#faad14",
+                  borderColor: "#faad14",
+                  color: "white",
+                }}
+                onClick={() => startEditing(record)}
+              ></Button>
+            </Tooltip>
+          )}
+          <Tooltip title="Assign asset">
+            {/* Assign Asset */}
+            <Button
+              type="primary"
+              icon={<UserOutlined />}
+              shape="circle"
+              onClick={showAssignModal}
+              style={{
+                backgroundColor: "#00b300",
+                borderColor: "#00b300",
+                color: "white",
+              }}
+            ></Button>
+            <Modal
+              width={500}
+              title="Assign asset : asset tag goes here"
+              open={isAssignModalVisible}
+              onCancel={handleAssignModalCancel}
+              footer={[
+                <Button key="cancel" onClick={handleAssignModalCancel}>
+                  Cancel
+                </Button>,
+                <Button
+                  key="submit"
+                  type="primary"
+                  onClick={() => assignAssetToUserform.submit()}
+                >
+                  Assign
+                </Button>,
+              ]}
+            >
+              <Form layout="vertical" onFinish={handleAssignAsset} form={assignAssetToUserform}>
+                <Form.Item
+                  label="User"
+                  name="User"
+                  rules={[
+                    { required: true, message: "Please select user!" },
+                  ]}
+                >
+                  <Select placeholder="Select user">
+                    {sampleUser.map((item) => <Option key={item} value={item}>{item}</Option>)}
+                  </Select>
+                </Form.Item>
+              </Form>
+            </Modal>
+          </Tooltip>
+          <Tooltip title="Unassign asset">
+            <Button
+              type="primary"
+              icon={<UserDeleteOutlined />}
+              shape="circle"
+              style={{
+                backgroundColor: "#f50",
+                borderColor: "#f50",
+                color: "white",
+              }}
+            ></Button>
+          </Tooltip>
           <Popconfirm
             title="Are you sure to delete this asset?"
             onConfirm={() => deleteAsset(record.key)}
             okText="Yes"
             cancelText="No"
           >
-            <Button type="link" danger>
-              Delete
-            </Button>
+            <Tooltip title="Delete asset">
+              <Button
+                type="primary"
+                icon={<DeleteOutlined />}
+                shape="circle"
+                style={{
+                  backgroundColor: "#c00",
+                  borderColor: "#c00",
+                  color: "white",
+                }}
+              ></Button>
+            </Tooltip>
           </Popconfirm>
         </Space>
       ),
     },
   ];
+
+
 
   return (
     <div style={{ padding: "20px" }}>
@@ -437,7 +511,7 @@ const Asset: React.FC = () => {
         open={isModalOpen}
         onCancel={handleCloseModal}
         footer={null}
-      > 
+      >
         <Form
           form={form}
           layout="vertical"
@@ -496,7 +570,7 @@ const Asset: React.FC = () => {
                 </Select>
               </Form.Item>
               <Form.Item label="Invoice Number" name="InvoiceNumber">
-                <Select placeholder="Invoice Number">
+                <Select placeholder="Invoice Number" showSearch>
                   {InvoiceNumberOptions.map((option) => (
                     <Option key={option} value={option}>
                       {option}
@@ -515,6 +589,9 @@ const Asset: React.FC = () => {
                   ))}
                 </Select>
               </Form.Item>
+              <Form.Item label="Serial Number" name="Serial" style={{ display: editingKey ? "block" : "none"}}>
+                  <Input placeholder="Serial Number"></Input>
+              </Form.Item>
             </Col>
             <Col span={3}>
               <Form.Item label="Model Number" name="ModelNumber">
@@ -525,6 +602,9 @@ const Asset: React.FC = () => {
                     </Option>
                   ))}
                 </Select>
+              </Form.Item>
+              <Form.Item label="Remarks" name="Remarks" style={{ display: editingKey ? "block" : "none"}}>
+                  <Input placeholder="Remarks"></Input>
               </Form.Item>
             </Col>
             <Col span={3}>
@@ -537,6 +617,11 @@ const Asset: React.FC = () => {
                   ))}
                 </Select>
               </Form.Item>
+              <Form.Item label="Asset Tag" name="AssetTag" style={{ display: editingKey ? "block" : "none"}}>
+                  <Input placeholder="Asset Tag" disabled></Input>
+              </Form.Item>
+            </Col>
+            <Col span={3}>
               <Form.Item
                 label="Is Replacement Asset"
                 name="IsReplacementAsset"
@@ -552,11 +637,9 @@ const Asset: React.FC = () => {
               <div>
                 <div style={{ float: "right" }}>
                   <Space>
-                    <Button key="cancel" onClick={handleCloseModal} style={{ marginRight: "5px"}}>
+                    <Button key="cancel" onClick={handleCloseModal}>
                       Cancel
                     </Button>
-                  </Space>
-                  <Space>
                     <Button
                       key="submit"
                       type="primary"
@@ -570,7 +653,7 @@ const Asset: React.FC = () => {
               </div>
             </Col>
           </Row>
-
+          {!editingKey && 
           <Row gutter={12}>
             <Col span={12}>
               <div className="mt-3">
@@ -589,10 +672,15 @@ const Asset: React.FC = () => {
               </div>
             </Col>
           </Row>
-        </Form>       
+          }
+        </Form>
       </Modal>
     </div>
   );
 };
 
 export default Asset;
+
+
+// Edit button
+// -- Show only when asset status = 'In Store', 'Assigned', 'Installed' 

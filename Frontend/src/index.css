@@ -68,6 +68,10 @@ textarea,             /* Text area box border color */
   color: #fff;
 }
 
+/* border radius for pagination element */
+.ant-pagination .ant-pagination-item {
+  border-radius: 3px;
+}
 
 /* Remove pagination border */
 .customPagination > .ant-pagination-options .ant-select-selector{
