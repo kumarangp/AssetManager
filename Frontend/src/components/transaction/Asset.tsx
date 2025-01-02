@@ -17,12 +17,16 @@ import {
   Checkbox,
   Tooltip,
 } from "antd";
-import { DeleteOutlined, UserDeleteOutlined, UserOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  UserDeleteOutlined,
+  UserOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
 
 import Pagination from "../shared/Pagination";
 import Search from "../shared/Search";
 import Status from "../shared/Status";
-
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -72,16 +76,18 @@ interface AssetFormValues {
   InvoiceNumber: string;
   IsReplacementAsset: boolean;
   serialRows: SerialTableRow[];
+  AssetStatus: string;
 }
 
-interface AssignAsset_to_user {  
+interface AssignAsset_to_user {
   key: string;
-  AssignUser: string;  
+  AssignUser: string;
 }
 
 const Asset: React.FC = () => {
   const [form] = Form.useForm<AssetFormValues>();
-  const [assignAssetToUserform] = Form.useForm<AssignAsset_to_user>();
+  const [assignAssetToUserform] = Form.useForm<AssignAsset_to_user>();  
+  const [deleteAssetForm] = Form.useForm();
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -89,6 +95,8 @@ const Asset: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [status, setStatus] = useState<string>("All");
   const [assetDetails, setAssetDetails] = useState<AssetData[]>([]);
+  // DELETE asset
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   const SupplierOptions = ["Supplier 1", "Supplier 2", "Supplier 3"];
   const LocationOptions = ["AKS", "USA"];
@@ -221,7 +229,8 @@ const Asset: React.FC = () => {
         AssignedDate: values.AssignedDate ? values.AssignedDate.toDate() : null,
         IsReplacementAsset: values.IsReplacementAsset || false,
         Serial: row.serial,
-        Remarks: row.remarks,
+        Remarks: row.remarks,   
+        AssetStatus: "In Store"     
       }));
 
       if (editingKey) {
@@ -247,7 +256,9 @@ const Asset: React.FC = () => {
 
   const deleteAsset = (key: string) => {
     setAssetDetails((prev) => prev.filter((item) => item.key !== key));
-    message.success("Asset details deleted successfully!");
+    message.success("Asset details deleted successfully!");    
+    deleteAssetForm.resetFields();
+    setIsDeleteModalVisible(false);
   };
 
   const startEditing = (record: AssetData) => {
@@ -292,40 +303,73 @@ const Asset: React.FC = () => {
       item.Model?.toLowerCase().includes(searchLower) ||
       item.ModelNumber?.toLowerCase().includes(searchLower) ||
       item.Location?.toLowerCase().includes(searchLower) ||
-      (item.AssignedDate && moment(item.AssignedDate).format("MM/DD/YYYY").includes(searchLower)) ||
+      (item.AssignedDate &&
+        moment(item.AssignedDate).format("MM/DD/YYYY").includes(searchLower)) ||
       item.SupplierName?.toLowerCase().includes(searchLower) ||
       item.InvoiceNumber?.toLowerCase().includes(searchLower) ||
-      
-      item.AssetTag?.toLowerCase().includes(searchLower) ||      
-      item.AssetType?.toLowerCase().includes(searchLower) ||      
+      item.AssetTag?.toLowerCase().includes(searchLower) ||
+      item.AssetType?.toLowerCase().includes(searchLower) ||
       item.Serial?.toLowerCase().includes(searchLower) ||
       item.AssignedUser?.toLowerCase().includes(searchLower) ||
-      item.AssetStatus?.toLowerCase().includes(searchLower) ||   
+      item.AssetStatus?.toLowerCase().includes(searchLower) ||
       item.AssignedUser?.toLowerCase().includes(searchLower) ||
       item.AssignedUserId?.toLowerCase().includes(searchLower) ||
       item.AssignedToAsset?.toLowerCase().includes(searchLower) ||
-      item.Remarks?.toLowerCase().includes(searchLower)       
+      item.Remarks?.toLowerCase().includes(searchLower)
     );
   });
 
   const [isAssignModalVisible, setIsAssignModalVisible] = useState(false);
-  // Show the modal
+  // Show the Assign modal
   const showAssignModal = () => {
-    setIsAssignModalVisible(true);     
+    setIsAssignModalVisible(true);
   };
-   // Close the modal
+  // Close the modal
   const handleAssignModalCancel = () => {
-    setIsAssignModalVisible(false);    
+    setIsAssignModalVisible(false);
     assignAssetToUserform.resetFields();
   };
-  // Assign asset 
+  // Assign asset
   const handleAssignAsset = () => {
-    // Add assign modal form submit logic here     
+    // Add assign modal form submit logic here
     console.log("Assign asset to the user - Submit");
-    setIsAssignModalVisible(false); 
+    setIsAssignModalVisible(false);
+    message.success("Asset assigned successfully!");
   };
 
-  const sampleUser = ['Sample user 1', 'Sample user 2'];
+  const sampleUser = ["Sample user 1", "Sample user 2"];
+
+  // Unassign Modal
+  const [isUnAssignModalVisible, setIsUnAssignModalVisible] = useState(false);
+  // Show Unassign modal
+  const showUnAssignModal = () => {
+    setIsUnAssignModalVisible(true);
+  };
+
+  // Close Unassign modal
+  const handleUnAssignModalCancel = () => {
+    setIsUnAssignModalVisible(false);
+  };
+
+  // Unassign asset
+  const handleUnassign = () => {
+    console.log("Unassign asset");
+    message.success("Asset Unassigned successfully!");
+    setIsUnAssignModalVisible(false);
+  };
+
+  
+  
+  const cancelDeleteModal = () => {
+    setIsDeleteModalVisible(false);
+    deleteAssetForm.resetFields();
+  }
+
+  const showDeleteModal = () => {
+    setIsDeleteModalVisible(true);
+  }
+
+  const StatusOptions = ["Scrap", "Lost/Stole", "Damaged/Repair", "Installed"];
 
   const columns = [
     { title: "Invoice Date", dataIndex: "InvoiceDate", key: "InvoiceDate" },
@@ -378,8 +422,13 @@ const Asset: React.FC = () => {
               ></Button>
             </Tooltip>
           )}
+          {(record.AssetStatus !== "Assigned" && 
+            record.AssetStatus !== "Damaged/Repair" &&
+            record.AssetStatus !== "Scrap" &&
+            record.AssetStatus !== "Lost/Stole"
+          ) && (
           <Tooltip title="Assign asset">
-            {/* Assign Asset */}
+            {/* Assign asset */}
             <Button
               type="primary"
               icon={<UserOutlined />}
@@ -409,21 +458,30 @@ const Asset: React.FC = () => {
                 </Button>,
               ]}
             >
-              <Form layout="vertical" onFinish={handleAssignAsset} form={assignAssetToUserform}>
+              <Form
+                layout="vertical"
+                onFinish={handleAssignAsset}
+                form={assignAssetToUserform}
+              >
                 <Form.Item
                   label="User"
                   name="User"
-                  rules={[
-                    { required: true, message: "Please select user!" },
-                  ]}
+                  rules={[{ required: true, message: "Please select user!" }]}
                 >
                   <Select placeholder="Select user">
-                    {sampleUser.map((item) => <Option key={item} value={item}>{item}</Option>)}
+                    {sampleUser.map((item) => (
+                      <Option key={item} value={item}>
+                        {item}
+                      </Option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Form>
             </Modal>
           </Tooltip>
+          )}
+          {/* Un assign asset */}
+          {(record.AssetStatus !== "Assigned") && (          
           <Tooltip title="Unassign asset">
             <Button
               type="primary"
@@ -434,33 +492,74 @@ const Asset: React.FC = () => {
                 borderColor: "#f50",
                 color: "white",
               }}
+              onClick={showUnAssignModal}
             ></Button>
+            <Modal
+              width={500}
+              title="Are you sure to Unassign this asset : asset tag goes here..."
+              open={isUnAssignModalVisible}
+              onCancel={handleUnAssignModalCancel}
+              footer={[
+                <Button key="cancel" onClick={handleUnAssignModalCancel}>
+                  Cancel
+                </Button>,
+                <Button key="submit" type="primary" onClick={handleUnassign}>
+                  Unassign
+                </Button>,
+              ]}
+            ></Modal>
           </Tooltip>
+          )}
+          {/* DELETE Asset */}
+          {(record.AssetStatus !== "Assigned") && (
+          <div>
           <Popconfirm
             title="Are you sure to delete this asset?"
-            onConfirm={() => deleteAsset(record.key)}
+            onConfirm={showDeleteModal}
             okText="Yes"
             cancelText="No"
           >
-            <Tooltip title="Delete asset">
-              <Button
-                type="primary"
-                icon={<DeleteOutlined />}
-                shape="circle"
-                style={{
-                  backgroundColor: "#c00",
-                  borderColor: "#c00",
-                  color: "white",
-                }}
-              ></Button>
-            </Tooltip>
+            <Button
+              color="danger"
+              icon={<DeleteOutlined />}
+              shape="circle"
+              variant="dashed"
+            ></Button>            
           </Popconfirm>
+          <Modal width={500}                  
+              title="Delete asset: asset tag goes here..."
+              open={isDeleteModalVisible}
+              onCancel={cancelDeleteModal}
+              footer={[
+                <Button key="cancel" onClick={cancelDeleteModal}>Cancel</Button>,
+                <Button key="submit" type="primary" danger onClick={() => deleteAssetForm.submit()}>Delete</Button>
+              ]}
+              >
+                <Form form = {deleteAssetForm}
+                layout="vertical"
+                onFinish={() => deleteAsset(record.key)}                
+              >
+                <Form.Item
+                  label="Status"
+                  name="Status"
+                  rules={[{ required: true, message: "Please select status!" }]}
+                >
+                  <Select placeholder="Select status">
+                    {StatusOptions.map((item) => (
+                      <Option key={item} value={item}>
+                        {item}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Form>
+          </Modal>
+          </div>
+          )}
         </Space>
       ),
     },
   ];
-
-
 
   return (
     <div style={{ padding: "20px" }}>
@@ -589,8 +688,12 @@ const Asset: React.FC = () => {
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item label="Serial Number" name="Serial" style={{ display: editingKey ? "block" : "none"}}>
-                  <Input placeholder="Serial Number"></Input>
+              <Form.Item
+                label="Serial Number"
+                name="Serial"
+                style={{ display: editingKey ? "block" : "none" }}
+              >
+                <Input placeholder="Serial Number"></Input>
               </Form.Item>
             </Col>
             <Col span={3}>
@@ -603,8 +706,12 @@ const Asset: React.FC = () => {
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item label="Remarks" name="Remarks" style={{ display: editingKey ? "block" : "none"}}>
-                  <Input placeholder="Remarks"></Input>
+              <Form.Item
+                label="Remarks"
+                name="Remarks"
+                style={{ display: editingKey ? "block" : "none" }}
+              >
+                <Input placeholder="Remarks"></Input>
               </Form.Item>
             </Col>
             <Col span={3}>
@@ -617,8 +724,12 @@ const Asset: React.FC = () => {
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item label="Asset Tag" name="AssetTag" style={{ display: editingKey ? "block" : "none"}}>
-                  <Input placeholder="Asset Tag" disabled></Input>
+              <Form.Item
+                label="Asset Tag"
+                name="AssetTag"
+                style={{ display: editingKey ? "block" : "none" }}
+              >
+                <Input placeholder="Asset Tag" disabled></Input>
               </Form.Item>
             </Col>
             <Col span={3}>
@@ -653,26 +764,26 @@ const Asset: React.FC = () => {
               </div>
             </Col>
           </Row>
-          {!editingKey && 
-          <Row gutter={12}>
-            <Col span={12}>
-              <div className="mt-3">
-                <div className="flex justify-between items-center mb-4">
-                  <Title level={5}>Serial Numbers and Remarks</Title>
-                  <Button type="primary" onClick={handleAddRow}>
-                    Add Row
-                  </Button>
+          {!editingKey && (
+            <Row gutter={12}>
+              <Col span={12}>
+                <div className="mt-3">
+                  <div className="flex justify-between items-center mb-4">
+                    <Title level={5}>Serial Numbers and Remarks</Title>
+                    <Button type="primary" onClick={handleAddRow}>
+                      Add Row
+                    </Button>
+                  </div>
+                  <Table
+                    columns={serialColumns}
+                    dataSource={serialRows}
+                    pagination={false}
+                    className="w-full"
+                  />
                 </div>
-                <Table
-                  columns={serialColumns}
-                  dataSource={serialRows}
-                  pagination={false}
-                  className="w-full"
-                />
-              </div>
-            </Col>
-          </Row>
-          }
+              </Col>
+            </Row>
+          )}
         </Form>
       </Modal>
     </div>
@@ -681,6 +792,5 @@ const Asset: React.FC = () => {
 
 export default Asset;
 
-
 // Edit button
-// -- Show only when asset status = 'In Store', 'Assigned', 'Installed' 
+// -- Show only when asset status = 'In Store', 'Assigned', 'Installed'
